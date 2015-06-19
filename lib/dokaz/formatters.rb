@@ -51,6 +51,12 @@ class Dokaz
       end
 
       puts
+      @errors.each do |code, e|
+        ln = e.backtrace.first.sub(/:in .*$/, '')
+        puts ANSI.red{"dokaz #{ln}"} + ANSI.cyan{" # #{e.message} (#{e.class})"}
+      end
+
+      puts
       puts [
         "#{@ok + @errors.count} total",
         !@ok.zero? && ANSI.green{"#{@ok} ok"},
