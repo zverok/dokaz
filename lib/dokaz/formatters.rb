@@ -87,7 +87,7 @@ class Dokaz
 
     def output_err(code, e)
       puts code
-      puts comment("# Throws: #{e.message} #{e.class}\n#    " + filter_backtrace(e.backtrace).join("\n#    "))
+      puts comment("# Throws: #{e.message} (#{e.class})\n#    " + filter_backtrace(e.backtrace).join("\n#    "))
     end
 
     def finish_block(block)
