@@ -1,0 +1,33 @@
+#!/usr/bin/env ruby
+# encoding: utf-8
+require 'slop'
+
+$:.unshift 'lib'
+require 'dokaz'
+
+patterns = []
+patterns << ARGV.shift until ARGV.empty? || ARGV.first =~ /^-/
+
+HELP = %Q{Usage: dokaz [patterns] [options]
+
+Patterns:
+  File.md             one file
+  File.md:15          only block around line 15
+  folder/*.md         all files in folder
+
+Options:
+  -r, --require      Additional files to require, comma-separated
+  -f, --format       Output format ("spec" or "show[case]")
+      --help         Shows this message
+}
+
+options = Slop.parse do
+  on :r, :require=, "Additional files to require, comma-separated"
+  on :f, :format=, "Output format (spec or show[case])"
+  on :help do
+    puts HELP
+    exit
+  end
+end
+
+Dokaz.new(patterns, options.to_hash).run
