@@ -40,9 +40,12 @@ options, each on newline.
 
 * "spec" -- simple "does it work?" check:
 
+<img src="https://raw.github.com/zverok/dokaz/master/screenshots/spec.png" alt="--format spec"/>
+
 * "showcase" or just "show" -- pretty copy-pasteable output of what
   sample code returns and prints:
 
+<img src="https://raw.github.com/zverok/dokaz/master/screenshots/spec.png" alt="--format showcase"/>
 
 You can just insert it back into your docs.
 
