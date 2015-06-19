@@ -22,6 +22,26 @@ class Dokaz
       def filter_backtrace(trace)
         trace.take_while{|ln| ln !~ /lib\/dokaz/}
       end
+
+      def ok(str)
+        color(:green, str)
+      end
+
+      def error(str)
+        color(:red, str)
+      end
+
+      def comment(str)
+        color(:dark, str)
+      end
+
+      def color(code, str)
+        if STDOUT.tty?
+          ANSI.send(code){str}
+        else
+          str
+        end
+      end
   end
   
   class SpecFormatter < Formatter
@@ -37,7 +57,7 @@ class Dokaz
     def finish_block(block)
       unless @err
         @ok += 1 
-        print ANSI.green{'.'}
+        print ok('.')
       end
     end
 
@@ -47,27 +67,27 @@ class Dokaz
 
       @errors.each do |code, e|
         puts code
-        puts( ANSI.red{"#{e.message} (#{e.class})\n  " + filter_backtrace(e.backtrace).join("\n  ") + "\n"})
+        puts( error("#{e.message} (#{e.class})\n  " + filter_backtrace(e.backtrace).join("\n  ") + "\n"))
       end
 
       puts
       @errors.each do |code, e|
         ln = e.backtrace.first.sub(/:in .*$/, '')
-        puts ANSI.red{"dokaz #{ln}"} + ANSI.cyan{" # #{e.message} (#{e.class})"}
+        puts error("dokaz #{ln}") + comment(" # #{e.message} (#{e.class})")
       end
 
       puts
       puts [
         "#{@ok + @errors.count} total",
-        !@ok.zero? && ANSI.green{"#{@ok} ok"},
-        !@errors.empty? && ANSI.red{"#{@errors.count} errors"}
+        !@ok.zero? && ok("#{@ok} ok"),
+        !@errors.empty? && error("#{@errors.count} errors")
       ].select{|l| l}.join(', ')
       
     end
     
     def output_err(code, e)
       @errors << [code, e]
-      print ANSI.red{'F'}
+      print error('F')
       @err = true
     end
   end
@@ -93,10 +113,5 @@ class Dokaz
     def finish_block(block)
       puts "\n\n"
     end
-
-    private
-      def comment(str)
-        ANSI.dark{str}
-      end
   end
 end
