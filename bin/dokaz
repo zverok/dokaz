@@ -5,10 +5,15 @@ require 'slop'
 $:.unshift 'lib'
 require 'dokaz'
 
+if File.exists?('.dokaz')
+  ARGV.push(*File.read('.dokaz').split("\n"))
+end
+
 patterns = []
 patterns << ARGV.shift until ARGV.empty? || ARGV.first =~ /^-/
 
-HELP = %Q{Usage: dokaz [patterns] [options]
+HELP = %Q{
+Usage: dokaz [patterns] [options]
 
 Patterns:
   File.md             one file
@@ -24,10 +29,12 @@ Options:
 options = Slop.parse do
   on :r, :require=, "Additional files to require, comma-separated"
   on :f, :format=, "Output format (spec or show[case])"
-  on :help do
-    puts HELP
-    exit
-  end
+  on :help
+end
+
+if patterns.empty? || options.help?
+  puts HELP
+  exit
 end
 
 Dokaz.new(patterns, options.to_hash).run
