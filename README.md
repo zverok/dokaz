@@ -45,7 +45,7 @@ options, each on newline.
 * "showcase" or just "show" -- pretty copy-pasteable output of what
   sample code returns and prints:
 
-<img src="https://raw.github.com/zverok/dokaz/master/screenshots/spec.png" alt="--format showcase"/>
+<img src="https://raw.github.com/zverok/dokaz/master/screenshots/showcase.png" alt="--format showcase"/>
 
 You can just insert it back into your docs.
 
