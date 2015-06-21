@@ -1,5 +1,6 @@
 # encoding: utf-8
 require 'strscan'
+require 'stringio'
 
 class Dokaz
   class Block

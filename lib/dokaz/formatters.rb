@@ -1,8 +1,14 @@
 # encoding: utf-8
 require 'ansi/code'
+require 'rouge'
 
 class Dokaz
   class Formatter
+    def initialize
+      @rouge = Rouge::Formatters::Terminal256.new
+      @lexer = Rouge::Lexers::Ruby.new
+    end
+    
     def start_block(block)
     end
 
@@ -35,6 +41,14 @@ class Dokaz
         color(:dark, str)
       end
 
+      def code(str)
+        if STDOUT.tty?
+          @rouge.format(@lexer.lex(str))
+        else
+          code + "\n"
+        end
+      end
+
       def color(code, str)
         if STDOUT.tty?
           ANSI.send(code){str}
@@ -46,6 +60,7 @@ class Dokaz
   
   class SpecFormatter < Formatter
     def initialize
+      super
       @ok = 0
       @errors = []
     end
@@ -65,8 +80,8 @@ class Dokaz
       puts
       puts
 
-      @errors.each do |code, e|
-        puts code
+      @errors.each do |src, e|
+        print code(src)
         puts( error("#{e.message} (#{e.class})\n  " + filter_backtrace(e.backtrace).join("\n  ") + "\n"))
       end
 
@@ -97,16 +112,16 @@ class Dokaz
       puts "#{block.caption}\n#{'=' * block.caption.size}\n\n"
     end
     
-    def output(code, res, out)
-      puts code
+    def output(src, res, out)
+      print code(src)
       unless out.empty?
         puts comment("# Prints: \n#  " + out.split("\n").join("\n#    "))
       end
       puts comment("# => " + res.inspect.split("\n").join("\n#    "))
     end
 
-    def output_err(code, e)
-      puts code
+    def output_err(src, e)
+      print code(src)
       puts comment("# Throws: #{e.message} (#{e.class})")
     end
 

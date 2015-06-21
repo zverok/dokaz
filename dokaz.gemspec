@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name     = 'dokaz'
-  s.version  = '0.0.3'
+  s.version  = '0.0.4'
   s.authors  = ['Victor Shepelev']
   s.email    = 'zverok.offline@gmail.com'
   s.homepage = 'https://github.com/zverok/dokaz'
@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'ansi'
   s.add_dependency 'slop', '~> 3'
+  s.add_dependency 'rouge'
 
   s.add_development_dependency 'rspec', '~> 3'
   s.add_development_dependency 'rspec-its', '~> 1'
