@@ -5,7 +5,7 @@ require 'rouge'
 class Dokaz
   class Formatter
     def initialize
-      @rouge = Rouge::Formatters::Terminal256.new
+      @rouge = Rouge::Formatters::Terminal256.new(theme: 'molokai')
       @lexer = Rouge::Lexers::Ruby.new
     end
     
@@ -45,7 +45,7 @@ class Dokaz
         if STDOUT.tty?
           @rouge.format(@lexer.lex(str))
         else
-          code + "\n"
+          code
         end
       end
 
@@ -81,13 +81,13 @@ class Dokaz
       puts
 
       @errors.each do |src, e|
-        print code(src)
+        puts code(src)
         puts( error("#{e.message} (#{e.class})\n  " + filter_backtrace(e.backtrace).join("\n  ") + "\n"))
       end
 
       puts
       @errors.each do |code, e|
-        ln = e.backtrace.first.sub(/:in .*$/, '')
+        ln = filter_backtrace(e.backtrace).last.sub(/:in .*$/, '')
         puts error("dokaz #{ln}") + comment(" # #{e.message} (#{e.class})")
       end
 
@@ -113,7 +113,7 @@ class Dokaz
     end
     
     def output(src, res, out)
-      print code(src)
+      puts code(src)
       unless out.empty?
         puts comment("# Prints: \n#  " + out.split("\n").join("\n#    "))
       end
@@ -121,7 +121,7 @@ class Dokaz
     end
 
     def output_err(src, e)
-      print code(src)
+      puts code(src)
       puts comment("# Throws: #{e.message} (#{e.class})")
     end
 

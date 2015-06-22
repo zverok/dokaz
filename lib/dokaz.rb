@@ -36,17 +36,15 @@ class Dokaz
   private
 
     def process_block(block)
-      lex = RubyLex.new
-      lex.set_input(SpecIO.new(block.code))
-      lex.each_top_level_statement do |line, line_no|
+      block.statements.each do |st|
         begin
           res = nil
           out = capture_output{
-            res = eval(line, TOPLEVEL_BINDING, block.file, block.line + line_no)
+            res = eval(st.code, TOPLEVEL_BINDING, block.file, st.line)
           }
-          @formatter.output(line, res, out)
+          @formatter.output(st.code, res, out)
         rescue => e
-          @formatter.output_err(line, e)
+          @formatter.output_err(st.code, e)
           break
         end
       end

@@ -51,13 +51,14 @@ puts a.sum(10)
 This code throws an error:
 
 ```ruby
+# It's a comment, but not seen while evaluating
 100 / 0
 ```
 
 This code requires additional require:
 
 ```ruby
-BigDecimal.new("0")
+BigDecimal.new('0')
 ```
 
 Try to run it with option `--require cgi`.
