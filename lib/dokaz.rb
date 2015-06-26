@@ -11,6 +11,13 @@ class Dokaz
     'show' => ShowcaseFormatter,
     'showcase' => ShowcaseFormatter
   }
+
+  class << self
+    def before(&block)
+      return @before || ->(){} unless block
+      @before = block
+    end
+  end
   
   def initialize(patterns, options = {})
     @blocks = select_blocks(patterns)
@@ -23,6 +30,8 @@ class Dokaz
   end
 
   def run
+    self.class.before.call
+    
     puts "Running #{@blocks.count} blocks from #{@blocks.map(&:file).uniq.count} files\n\n"
     
     @blocks.each do |b|

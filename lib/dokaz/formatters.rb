@@ -115,7 +115,7 @@ class Dokaz
     def output(src, res, out)
       puts code(src)
       unless out.empty?
-        puts comment("# Prints: \n#  " + out.split("\n").join("\n#    "))
+        puts comment("# Prints: \n#  " + out.split("\n").join("\n#  "))
       end
       puts comment("# => " + res.inspect.split("\n").join("\n#    "))
     end
