@@ -9,9 +9,6 @@ if File.exists?('.dokaz')
   ARGV.push(*File.read('.dokaz').split(/\s+/m))
 end
 
-patterns = []
-patterns << ARGV.shift until ARGV.empty? || ARGV.first =~ /^-/
-
 HELP = %Q{
 Usage: dokaz [patterns] [options]
 
@@ -26,10 +23,17 @@ Options:
       --help         Shows this message
 }
 
+patterns = []
+patterns << ARGV.shift until ARGV.empty? || ARGV.first =~ /^-/
+
 options = Slop.parse do
   on :r, :require=, "Additional files to require, comma-separated"
   on :f, :format=, "Output format (spec or show[case])"
   on :help
+end
+
+if patterns.empty?
+  patterns.concat(Dir['README.{md,markdown}'])
 end
 
 if patterns.empty? || options.help?
