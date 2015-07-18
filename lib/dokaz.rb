@@ -52,7 +52,7 @@ class Dokaz
             res = eval(st.code, TOPLEVEL_BINDING, block.file, st.line)
           }
           @formatter.output(st.code, res, out)
-        rescue => e
+        rescue Exception => e
           @formatter.output_err(st.code, e)
           break
         end
