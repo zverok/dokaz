@@ -22,6 +22,10 @@ Then, lets try again:
 def second
   puts "WTF??? I just typed ```"
 end
+# this comment goes to first statement!
+
+second_and_half = 5**6
+# and this for second
 ```
 
 And again:
