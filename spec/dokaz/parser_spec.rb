@@ -1,4 +1,3 @@
-# encoding: utf-8
 class Dokaz
   describe Parser do
     let(:path){'spec/fixtures/Sample.md'}

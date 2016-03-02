@@ -87,7 +87,7 @@ class Dokaz
 
       puts
       @errors.each do |code, e|
-        ln = filter_backtrace(e.backtrace).last.sub(/:in .*$/, '')
+        ln = filter_backtrace(e.backtrace).last.to_s.sub(/:in .*$/, '')
         puts error("dokaz #{ln}") + comment(" # #{e.message} (#{e.class})")
       end
 
