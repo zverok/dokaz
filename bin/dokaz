@@ -5,7 +5,7 @@ require 'slop'
 $:.unshift 'lib'
 require 'dokaz'
 
-if File.exists?('.dokaz')
+if File.exist?('.dokaz')
   ARGV.push(*File.read('.dokaz').split(/\s+/m))
 end
 
