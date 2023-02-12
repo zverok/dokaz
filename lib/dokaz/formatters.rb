@@ -5,7 +5,7 @@ require 'rouge'
 class Dokaz
   class Formatter
     def initialize
-      @rouge = Rouge::Formatters::Terminal256.new(theme: 'molokai')
+      @rouge = Rouge::Formatters::Terminal256.new(Rouge::Themes::Molokai.new)
       @lexer = Rouge::Lexers::Ruby.new
     end
     

@@ -34,6 +34,8 @@ class Dokaz
   end
   
   class Block
+    FakeIRBContext = Struct.new(:local_variables)
+
     attr_reader :code, :line, :file
     attr_reader :statements
 
@@ -60,10 +62,24 @@ class Dokaz
     def parse!
       @statements = []
       lex = RubyLex.new
-      lex.set_input(SpecIO.new(code))
-      lex.each_top_level_statement do |st, line_no|
-        @statements << Statement.new(st, line + line_no, self)
+
+      # We do unholy things by reusing IRB's internal helper classes.
+      # In 3.2 (ver.1.6), IRB changed them to be more complicated. I only had
+      # time to quick-hack it around with fake copies of object IRB use.
+      # It might fail anytime, but works on test examples :shrug:
+      if IRB::VERSION >= '1.6'
+        ctx = FakeIRBContext.new(local_variables: [])
+        lex.set_input(SpecIO.new(code), context: ctx)
+        lex.each_top_level_statement(ctx) do |st, line_no|
+          @statements << Statement.new(st, line + line_no, self)
+        end
+      else
+        lex.set_input(SpecIO.new(code))
+        lex.each_top_level_statement do |st, line_no|
+          @statements << Statement.new(st, line + line_no, self)
+        end
       end
+
       @statements.each_cons(2){|s1, s2|
         s1.comment = s2.pre_comment
       }
